@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	
+	<!-- Create a Bean for Message Source -->
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<value>com/defecttracking/resourcess/messages</value>
+		</property>
+	</bean>
+	
+		
+	<bean id="userdao" class="com.defecttracking.user.dao.UserDAO" />
+	
+	<bean id="defectdao" class="com.defecttracking.defect.dao.DefectDAO" />
+	
+	<bean id="projectdao" class="com.defecttracking.project.dao.ProjectDAO" />
+
+	<bean id="userManager" class="com.defecttracking.user.service.UserManagerImpl">
+		<property name="userdao">
+			<ref bean="userdao" />
+		</property>
+	</bean>
+	
+	<bean id="defectManager" class="com.defecttracking.defect.service.DefectManagerImpl">
+		<property name="defectdao">
+			<ref bean="defectdao" />
+		</property>
+	</bean>
+	
+	<bean id="projectManager" class="com.defecttracking.project.service.ProjectManagerImpl">
+		<property name="projectdao">
+			<ref bean="projectdao" />
+		</property>
+	</bean>
+	
+	
+	<bean name="/login.html" class="com.defecttracking.user.controller.LoginController">
+		<property name="commandClass" value="com.defecttracking.user.command.UserCommand" />
+		<property name="formView" value="login" />
+		<property name="successView" value="home.html" />
+
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+
+	
+	
+	<bean name="/main.html" class="com.defecttracking.defect.controller.MainController">
+		<property name="commandClass"
+			value="com.defecttracking.defect.command.DefectCommand" />
+		<property name="formView" value="main" />
+		<property name="successView" value="main.html" />
+		<property name="defectManager">
+			<ref bean="defectManager" />
+		</property>
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+		<property name="projectManager">
+			<ref bean="projectManager" />
+		</property>
+	</bean>
+	
+	
+		<bean name="/home.html" class="com.defecttracking.common.controller.HomeController">
+		<property name="defectManager">
+			<ref bean="defectManager" />
+		</property>
+	</bean>
+	
+	
+	<bean name="/adminhome.html" class="com.defecttracking.common.controller.AdminHomeController">		
+	</bean>
+
+	<bean name="/adminheader.html" class="com.defecttracking.common.controller.AdminHeaderController">		
+	</bean>
+	
+	<bean name="/adminleftmenu.html" class="com.defecttracking.common.controller.AdminLeftMenuController">		
+	</bean>
+	
+	<bean name="/adminfooter.html" class="com.defecttracking.common.controller.AdminFooterController">		
+	</bean>
+	
+
+	<bean name="/addUser.html"
+		class="com.defecttracking.user.controller.AddUserController">
+		<property name="commandClass"
+			value="com.defecttracking.user.command.UserCommand" />
+		<property name="formView" value="addUser" />
+		<property name="successView" value="viewUser.html" />	
+		<property name="validator">
+			<bean
+				class="com.defecttracking.user.validator.AddUserValidator" />
+		</property>			
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	
+	<!-- Create a Bean for View User Page -->
+	
+	<bean name="/viewUser.html"
+	 class="com.defecttracking.user.controller.ViewUserController">
+	<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	<bean name="/editUser.html"
+		class="com.defecttracking.user.controller.EditUserController">
+		<property name="commandClass"
+			value="com.defecttracking.user.command.UserCommand" />
+		<property name="formView" value="editUser" />
+		<property name="successView" value="viewUser.html" />	
+		<property name="validator">
+			<bean
+				class="com.defecttracking.user.validator.EditUserValidator" />
+		</property>				
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	
+	<!-- Create a Bean for Delete a User Details-->
+	<bean name="/deleteUser.html"
+	 class="com.defecttracking.user.controller.DeleteUserController">
+	<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	
+	<!-- Admin User  -->
+	
+	
+	<bean name="/addAdmin.html"
+		class="com.defecttracking.user.controller.AddAdminUserController">
+		<property name="commandClass"
+			value="com.defecttracking.user.command.UserCommand" />
+		<property name="formView" value="addUser" />
+		<property name="successView" value="viewAdmin.html" />	
+		<property name="validator">
+			<bean
+				class="com.defecttracking.user.validator.AddUserValidator" />
+		</property>				
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	
+	<!-- Create a Bean for View User Page -->
+	
+	<bean name="/viewAdmin.html"
+	 class="com.defecttracking.user.controller.ViewAdminUserController">
+	<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	<bean name="/editAdmin.html"
+		class="com.defecttracking.user.controller.EditAdminUserController">
+		<property name="commandClass"
+			value="com.defecttracking.user.command.UserCommand" />
+		<property name="formView" value="editUser" />
+		<property name="successView" value="viewAdmin.html" />	
+		<property name="validator">
+			<bean
+				class="com.defecttracking.user.validator.EditUserValidator" />
+		</property>			
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	<bean name="/changePassword.html"
+		class="com.defecttracking.user.controller.ChangePasswordController">
+		<property name="commandClass"
+			value="com.defecttracking.user.command.UserCommand" />
+		<property name="formView" value="changePassword" />
+		<property name="successView" value="viewAdmin.html" />	
+		<property name="validator">
+			<bean
+				class="com.defecttracking.user.validator.ChangePasswordValidator" />
+		</property>			
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	
+	<!-- Create a Bean for Delete a User Details-->
+	<bean name="/deleteAdmin.html"
+	 class="com.defecttracking.user.controller.DeleteAdminUserController">
+	<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+	</bean>
+	
+	
+	<!--  -->
+	
+	<bean name="/addProject.html"
+		class="com.defecttracking.project.controller.AddProjectController">
+		<property name="commandClass"
+			value="com.defecttracking.project.command.ProjectCommand" />
+		<property name="formView" value="addProject" />
+		<property name="successView" value="viewProject.html" />	
+		<property name="validator">
+			<bean
+				class="com.defecttracking.project.validator.AddProjectValidator" />
+		</property>			
+		<property name="projectManager">
+			<ref bean="projectManager" />
+		</property>
+	</bean>
+	
+	
+	
+	
+	<!-- Create a Bean for View User Page -->
+	
+	<bean name="/viewProject.html"
+	 class="com.defecttracking.project.controller.ViewProjectController">
+	<property name="projectManager">
+			<ref bean="projectManager" />
+		</property>
+	</bean>
+	
+	<bean name="/editProject.html"
+		class="com.defecttracking.project.controller.EditProjectController">
+		<property name="commandClass"
+			value="com.defecttracking.project.command.ProjectCommand" />
+		<property name="formView" value="editProject" />
+		<property name="successView" value="viewProject.html" />	
+		<property name="validator">
+			<bean
+				class="com.defecttracking.project.validator.AddProjectValidator" />
+		</property>			
+		<property name="projectManager">
+			<ref bean="projectManager" />
+		</property>
+	</bean>
+	
+	<!-- Create a Bean for Delete a User Details-->
+	<bean name="/deleteProject.html"
+	 class="com.defecttracking.project.controller.DeleteProjectController">
+	<property name="projectManager">
+			<ref bean="projectManager" />
+		</property>
+	</bean>
+	
+	
+	<bean name="/addNewDefect.html"
+		class="com.defecttracking.defect.controller.AddNewDefectController">
+		<property name="commandClass"
+			value="com.defecttracking.defect.command.DefectCommand" />
+		<property name="formView" value="addNewDefect" />
+		<property name="successView" value="home.html" />
+		<property name="defectManager">
+			<ref bean="defectManager" />
+		</property>
+		<property name="userManager">
+			<ref bean="userManager" />
+		</property>
+		<property name="projectManager">
+			<ref bean="projectManager" />
+		</property>
+	</bean>
+
+	<bean name="/addQuery.html"
+		class="com.defecttracking.defect.controller.AddQueryController">
+		<property name="commandClass"
+			value="com.defecttracking.defect.command.QueryCommand" />
+		<property name="formView" value="addQuery" />
+		<property name="successView" value="home.html" />
+		<property name="defectManager">
+			<ref bean="defectManager" />
+		</property>
+
+	</bean>
+
+	<bean name="/createQuery.html"
+		class="com.defecttracking.defect.controller.CreateNewQueryController">
+		<property name="commandClass"
+			value="com.defecttracking.defect.command.QueryCommand" />
+		<property name="formView" value="createQuery" />
+		<property name="successView" value="home.html" />
+		<property name="defectManager">
+			<ref bean="defectManager" />
+		</property>
+	</bean>
+
+	<bean name="/buildRelease.html"
+		class="com.defecttracking.defect.controller.BuildReleaseController">
+	</bean>
+	
+	<bean name="/notes.html" class="com.defecttracking.defect.controller.NotesController">
+	<property name="commandClass"
+			value="com.defecttracking.defect.command.NotesCommand" />
+		<property name="formView" value="notes" />
+		<property name="successView" value="notes.html" />
+		<property name="defectManager">
+			<ref bean="defectManager" />
+		</property>
+	</bean>
+
+	<bean name="/resolution.html"
+		class="com.defecttracking.defect.controller.ResolutionController">
+	</bean>
+
+	<bean name="/attachments.html"
+		class="com.defecttracking.defect.controller.AttachmentsController">
+	</bean>
+
+	<bean name="/history.html"
+		class="com.defecttracking.defect.controller.HistoryController">
+	</bean>
+	
+	<bean name="/runQuery.html"
+		class="com.defecttracking.defect.controller.QueryFilterController">
+		<property name="commandClass"
+			value="com.defecttracking.defect.command.QueryFilterCommand" />
+		<property name="formView" value="runQuery" />
+		<property name="successView" value="viewDefects.html" />
+		<property name="defectManager">
+			<ref bean="defectManager" />
+		</property>
+	</bean>
+
+	<bean name="/viewDefects.html"
+		class="com.defecttracking.defect.controller.ViewDefectsController">
+	</bean>
+	
+	<bean name="/assignDefect.html"
+		class="com.defecttracking.defect.controller.AssignDefectToUserController">
+		<property name="defectManager">
+			<ref bean="defectManager" />
+		</property>
+		<property name="projectManager">
+			<ref bean="projectManager" />
+		</property>
+	</bean>
+	
+	
+	
+	
+	<bean name="/searchByPrjId.html" class="com.defecttracking.defect.controller.SearchDefectByProjectIdController">
+	<property name="commandClass"
+			value="com.defecttracking.project.command.ProjectCommand" />
+		<property name="formView" value="searchByPrjId" />
+		<property name="successView" value="assignDefect.html" />		
+	</bean>
+	
+	<bean name="/searchByOwnerId.html" class="com.defecttracking.defect.controller.SearchDefectByOwnerIdController">
+	<property name="commandClass"
+			value="com.defecttracking.user.command.UserCommand" />
+		<property name="formView" value="searchByOwnerId" />
+		<property name="successView" value="assignDefect.html" />		
+	</bean>
+	
+	<bean name="/searchByDefectId.html" class="com.defecttracking.defect.controller.SearchDefectByDefectIdController">
+	<property name="commandClass"
+			value="com.defecttracking.defect.command.DefectCommand" />
+		<property name="formView" value="searchByDefectId" />
+		<property name="successView" value="assignDefect.html" />		
+	</bean>
+
+</beans>
